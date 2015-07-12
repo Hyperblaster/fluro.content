@@ -96,9 +96,9 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
     controller.query = function(queryDetails, typeName) {
         if (typeName && typeName.length) {
-            return $http.post(Fluro.apiURL + '/content/' + typeName, queryDetails);
+            return $http.post(Fluro.apiURL + '/content/' + typeName + '/query', queryDetails);
         } else {
-            return $http.post(Fluro.apiURL + '/content', queryDetails);
+            return $http.post(Fluro.apiURL + '/content/query', queryDetails);
         }
     }
 
@@ -112,8 +112,6 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
                 return item;
             }
         });
-
-        console.log('Populate', ids);
 
         return controller.get(ids);
     }
