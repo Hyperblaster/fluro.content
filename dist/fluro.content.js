@@ -133,7 +133,6 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
         //////////////////////////////////
 
         if (requiredIds.length) {
-            console.log('Retrieving ', requiredIds.length, 'items')
 
             //////////////////////////////////////////
 
