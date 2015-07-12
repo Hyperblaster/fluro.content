@@ -113,6 +113,8 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
             }
         });
 
+        console.log('Populate', ids);
+
         return controller.get(ids);
     }
 
