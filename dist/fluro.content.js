@@ -81,8 +81,7 @@ angular.module('fluro.content')
 
 
 
-angular.module('fluro.content')
-.service('FluroContentRetrieval', function($cacheFactory, Fluro, $q, $http) {
+angular.module('fluro.content').service('FluroContentRetrieval', function($cacheFactory, Fluro, $q, $http) {
 
 
     //////////////////////////////////////////////////
@@ -96,8 +95,8 @@ angular.module('fluro.content')
     //////////////////////////////////////////////////
 
     controller.query = function(queryDetails, typeName) {
-        if(type && type.length) {
-            return $http.post(Fluro.apiURL + '/content/'+ typeName, queryDetails);
+        if (type && type.length) {
+            return $http.post(Fluro.apiURL + '/content/' + typeName, queryDetails);
         } else {
             return $http.post(Fluro.apiURL + '/content', queryDetails);
         }
@@ -107,16 +106,16 @@ angular.module('fluro.content')
 
     controller.populate = function(contentArray) {
         var ids = _.map(contentArray, function(item) {
-            if(item._id) {
+            if (item._id) {
                 return item._id;
             } else {
                 return item;
             }
         });
 
-         return controller.get(ids);
+        return controller.get(ids);
     }
-   
+
     //////////////////////////////////////////////////
 
     controller.get = function(ids) {
@@ -135,18 +134,18 @@ angular.module('fluro.content')
 
         if (requiredIds.length) {
             console.log('Retrieving ', requiredIds.length, 'items')
-            
+
             //////////////////////////////////////////
 
             //Query all of the nodes
             controller.query({
-                _id:{
-                    $in:requiredIds
+                _id: {
+                    $in: requiredIds
                 }
             }).then(function(res) {
                 //Add each item to the cache
                 _.each(res.data, function(item) {
-                    //console.log('Cache', item.title)
+                    console.log('Create and Cache', item.title)
                     cache[item._id] = item;
                 })
 
@@ -160,7 +159,7 @@ angular.module('fluro.content')
         } else {
             finish();
         }
-        
+
         //////////////////////////////////////////
 
         function finish() {
@@ -175,9 +174,9 @@ angular.module('fluro.content')
         //////////////////////////////////////////
 
         return deferred.promise;
-
-
     }
+
+    //////////////////////////////////////////
 
     return controller;
 
