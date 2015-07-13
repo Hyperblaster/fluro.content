@@ -101,7 +101,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
         }
         
         if (typeName && typeName.length) {
-            return $http.post(Fluro.apiURL + '/_query/' + typeName, queryDetails);
+            return $http.post(Fluro.apiURL + '/' + typeName + '/_query', queryDetails);
         } else {
             return $http.post(Fluro.apiURL + '/_query', queryDetails);
         }
