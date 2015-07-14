@@ -109,7 +109,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
     //////////////////////////////////////////////////
 
-    controller.multipleQuery = function(ids) {
+    controller.queryMultiple = function(ids) {
         return $http.post(Fluro.apiURL + '/content/_query/multiple', ids);
     }
 
