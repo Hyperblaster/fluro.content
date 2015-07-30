@@ -94,6 +94,40 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
     //////////////////////////////////////////////////
 
+    controller.getCollection = function(id) {
+
+        var deferred = $q.defer();
+
+        $http.get(Fluro.apiURL + '/content/_collection/' + id).then(function(res) {
+            deferred.resolve(res.data);
+        });
+
+
+        return deferred.promise;
+
+    }
+
+
+    //////////////////////////////////////////////////
+
+    controller.getMultipleCollections = function(ids) {
+
+        var deferred = $q.defer();
+
+        $http.post(Fluro.apiURL + '/content/_collection/multiple', ids)
+            .then(function(res) {
+                deferred.resolve(res.data);
+            });
+
+        return deferred.promise;
+
+    }
+
+
+
+
+    //////////////////////////////////////////////////
+
     controller.query = function(queryDetails, typeName, id) {
 
         var deferred = $q.defer();
@@ -175,7 +209,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
             }).then(function(res) {
                 //Add each item to the cache
                 _.each(res, function(item) {
-                   // console.log('Create and Cache', item.title)
+                    // console.log('Create and Cache', item.title)
                     cache[item._id] = item;
                 })
 
