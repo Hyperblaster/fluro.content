@@ -2,6 +2,8 @@
 //Create Fluro UI With dependencies
 angular.module('fluro.content', [
 	'fluro.util',
+	'ngResource',
+
 	]);
 angular.module('fluro.content')
 .service('FluroContent', function($resource, CacheManager, Fluro) {
