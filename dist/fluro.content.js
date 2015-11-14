@@ -186,31 +186,6 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
     controller.queryMultiple = function(ids, noCache) {
 
-/**
-        function doQuery(id) {
-           return controller.query(null, null, id, noCache);
-        }
-
-
-        var ids = _.map(ids, function(id) {
-            return doQuery(id);
-        })
-
-        //Wait for all queries to resolve
-        $q.all(ids).then(function(data) {
-           
-           var billingAccounts = data[0];
-           var shippingAccounts = data[1];
-
-           //TODO: something...
-        });
-
-/**/
-
-    
-
-
-        /**/
         var deferred = $q.defer();
 
 
@@ -220,30 +195,41 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
         }
 
         $http({
-          method: 'GET',
-          url: url,
-          params: {
-            ids: ids 
-          }
+            method: 'GET',
+            url: url,
+            params: {
+                ids: ids
+            }
         }).then(function(res) {
-                deferred.resolve(res.data);
-            });
-
-
-       
-            
-
-        /**
-        $http.post(url, ids)
-            .then(function(res) {
-                deferred.resolve(res.data);
-            });
-        /**/
+            deferred.resolve(res.data);
+        });
 
         return deferred.promise;
+    }
 
-        /**/
+    //////////////////////////////////////////////////
 
+    controller.retrieveMultiple = function(ids, noCache) {
+
+        var deferred = $q.defer();
+
+
+        var url = Fluro.apiURL + '/content/multiple';
+        if (noCache) {
+            url += '?noCache=true';
+        }
+
+        $http({
+            method: 'GET',
+            url: url,
+            params: {
+                ids: ids
+            }
+        }).then(function(res) {
+            deferred.resolve(res.data);
+        });
+
+        return deferred.promise;
     }
 
     //////////////////////////////////////////////////
@@ -280,8 +266,27 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
         if (requiredIds.length) {
 
             //////////////////////////////////////////
+            
+            //Query all of the nodes by a GET request
+            controller.retrieveMultiple(requiredIds, noCache).then(function(res) {
+                //Add each item to the cache
+                _.each(res, function(item) {
+                    // console.log('Create and Cache', item.title)
+                    cache[item._id] = item;
+                })
 
-            //Query all of the nodes
+                finish();
+            }, function(res) {
+
+                //Failed to retrieve ids
+                deferred.reject(res);
+
+            })
+/**/
+
+            //////////////////////////////////////////
+            /** 
+            //Query all of the nodes by POSTing a query of ids
             controller.query({
                 _id: {
                     $in: requiredIds
@@ -300,6 +305,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
                 deferred.reject(res);
 
             })
+/**/
         } else {
             finish();
         }
