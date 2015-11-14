@@ -186,6 +186,31 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
     controller.queryMultiple = function(ids, noCache) {
 
+/**
+        function doQuery(id) {
+           return controller.query(null, null, id, noCache);
+        }
+
+
+        var ids = _.map(ids, function(id) {
+            return doQuery(id);
+        })
+
+        //Wait for all queries to resolve
+        $q.all(ids).then(function(data) {
+           
+           var billingAccounts = data[0];
+           var shippingAccounts = data[1];
+
+           //TODO: something...
+        });
+
+/**/
+
+    
+
+
+        /**/
         var deferred = $q.defer();
 
 
@@ -194,13 +219,30 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
             url += '?noCache=true';
         }
 
+        $http({
+          method: 'GET',
+          url: url,
+          params: {
+            "ids[]": ids 
+          }
+        }).then(function(res) {
+                deferred.resolve(res.data);
+            });
 
+
+       
+            
+
+        /**
         $http.post(url, ids)
             .then(function(res) {
                 deferred.resolve(res.data);
             });
+        /**/
 
         return deferred.promise;
+
+        /**/
 
     }
 
