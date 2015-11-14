@@ -223,7 +223,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
           method: 'GET',
           url: url,
           params: {
-            "ids[]": ids 
+            ids: ids 
           }
         }).then(function(res) {
                 deferred.resolve(res.data);
