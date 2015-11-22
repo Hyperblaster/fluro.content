@@ -125,14 +125,56 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
             url += '?noCache=true';
         }
 
+        $http({
+            method: 'GET',
+            url: url,
+            params: {
+                ids: ids
+            }
+        }).then(function(res) {
+            deferred.resolve(res.data);
+        });
+
+/**        
         $http.post(url, ids)
             .then(function(res) {
                 deferred.resolve(res.data);
             });
+/**/
 
         return deferred.promise;
 
     }
+
+    /**
+    
+    //////////////////////////////////////////////////
+
+    controller.queryMultiple = function(ids, noCache) {
+
+        var deferred = $q.defer();
+
+
+        var url = Fluro.apiURL + '/content/_query/multiple';
+        if (noCache) {
+            url += '?noCache=true';
+        }
+
+        $http({
+            method: 'GET',
+            url: url,
+            params: {
+                ids: ids
+            }
+        }).then(function(res) {
+            deferred.resolve(res.data);
+        });
+
+        return deferred.promise;
+    }
+
+
+    /**/
 
 
 
