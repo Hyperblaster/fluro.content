@@ -310,7 +310,9 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
         //////////////////////////////////////
 
          //Query all of the nodes by a GET request
-        return controller.retrieveMultiple(ids, noCache, {select:fields}).then(deferred.resolve, deferred.reject);
+        controller.retrieveMultiple(ids, noCache, {select:fields}).then(deferred.resolve, deferred.reject);
+
+        return deferred.promise;
 
     }
 
