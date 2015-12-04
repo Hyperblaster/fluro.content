@@ -251,22 +251,25 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
     //////////////////////////////////////////////////
 
-    controller.retrieveMultiple = function(ids, noCache) {
+    controller.retrieveMultiple = function(ids, noCache, params) {
 
         var deferred = $q.defer();
-
 
         var url = Fluro.apiURL + '/content/multiple';
         if (noCache) {
             url += '?noCache=true';
         }
 
+        if(!params) {
+            params = {};
+        }
+
+        params.ids = ids;
+
         $http({
             method: 'GET',
             url: url,
-            params: {
-                ids: ids
-            }
+            params:params
         }).then(function(res) {
             deferred.resolve(res.data);
         });
@@ -286,8 +289,29 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
         });
 
         console.log('Populate no cache', noCache);
-
         return controller.get(ids, noCache);
+    }
+
+    //////////////////////////////////////////////////
+
+    controller.populatePartial = function(contentArray, fields, noCache) {
+
+        var deferred = $q.defer();
+
+        //Get the items as ids
+        var ids = _.map(contentArray, function(item) {
+            if (item._id) {
+                return item._id;
+            } else {
+                return item;
+            }
+        });
+
+        //////////////////////////////////////
+
+         //Query all of the nodes by a GET request
+        controller.retrieveMultiple(requiredIds, noCache).then(deferred.resolve, deferred.reject);
+
     }
 
     //////////////////////////////////////////////////
