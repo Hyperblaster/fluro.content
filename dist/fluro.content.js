@@ -135,7 +135,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
             deferred.resolve(res.data);
         });
 
-/**        
+        /**        
         $http.post(url, ids)
             .then(function(res) {
                 deferred.resolve(res.data);
@@ -147,7 +147,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
     }
 
     /**
-    
+
     //////////////////////////////////////////////////
 
     controller.queryMultiple = function(ids, noCache) {
@@ -177,6 +177,47 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
     /**/
 
 
+
+    //////////////////////////////////////////////////
+
+    controller.getQuery = function(id, options) {
+
+        if(!options) {
+            options = {};
+        }
+
+        ////////////////////////////
+
+        //Defer a promise
+        var deferred = $q.defer();
+
+        //Create the url
+        var url = Fluro.apiURL + '/content/_query/' + id;
+
+        //If variables are provided
+        if (options.noCache || options.template) {
+            url += '?vars';
+
+            if (options.noCache) {
+                url += '&noCache=true';
+            }
+
+            if (options.template) {
+                url += '&template=' + options.template;
+            }
+        }
+
+        ////////////////////////////
+
+        $http.get(url).then(function(res) {
+            deferred.resolve(res.data);
+        });
+
+        ////////////////////////////
+
+        return deferred.promise;
+
+    }
 
 
     //////////////////////////////////////////////////
@@ -260,7 +301,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
             url += '?noCache=true';
         }
 
-        if(!params) {
+        if (!params) {
             params = {};
         }
 
@@ -269,7 +310,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
         $http({
             method: 'GET',
             url: url,
-            params:params
+            params: params
         }).then(function(res) {
             deferred.resolve(res.data);
         });
@@ -309,8 +350,10 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
         //////////////////////////////////////
 
-         //Query all of the nodes by a GET request
-        controller.retrieveMultiple(ids, noCache, {select:fields}).then(deferred.resolve, deferred.reject);
+        //Query all of the nodes by a GET request
+        controller.retrieveMultiple(ids, noCache, {
+            select: fields
+        }).then(deferred.resolve, deferred.reject);
 
         return deferred.promise;
 
@@ -334,7 +377,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
         if (requiredIds.length) {
 
             //////////////////////////////////////////
-            
+
             //Query all of the nodes by a GET request
             controller.retrieveMultiple(requiredIds, noCache).then(function(res) {
                 //Add each item to the cache
@@ -350,7 +393,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
                 deferred.reject(res);
 
             })
-/**/
+            /**/
 
             //////////////////////////////////////////
             /** 
