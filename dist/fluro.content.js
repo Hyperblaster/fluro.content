@@ -38,7 +38,7 @@ angular.module('fluro.content')
             },
             batch: {
                 method: 'POST',
-                ignoreLoadingBar: true
+                ignoreLoadingBar: false
             }
         });
     }
@@ -382,7 +382,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
             controller.retrieveMultiple(requiredIds, noCache).then(function(res) {
                 //Add each item to the cache
                 _.each(res, function(item) {
-                    // console.log('Create and Cache', item.title)
+                    console.log('Create and Cache', item.title)
                     cache[item._id] = item;
                 })
 
