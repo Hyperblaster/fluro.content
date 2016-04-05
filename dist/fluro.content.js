@@ -34,11 +34,11 @@ angular.module('fluro.content')
                 method: 'GET',
                 isArray: true,
                 cache: cache,
-                ignoreLoadingBar: true
+                ignoreLoadingBar: ignoreLoadingBar
             },
             batch: {
                 method: 'POST',
-                ignoreLoadingBar: false
+                ignoreLoadingBar: ignoreLoadingBar
             }
         });
     }
@@ -69,7 +69,7 @@ angular.module('fluro.content')
             },
             batch: {
                 method: 'POST',
-                ignoreLoadingBar: true
+                ignoreLoadingBar: ignoreLoadingBar
             }
         });
     }
