@@ -348,7 +348,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
             url += '?noCache=true';
         }
 
-        console.log('RETRIEVE MULTIPLE', params);
+        // console.log('RETRIEVE MULTIPLE', params);
 
         if (!params) {
             params = {};
