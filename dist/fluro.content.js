@@ -222,17 +222,51 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
     //////////////////////////////////////////////////
 
-    controller.query = function(queryDetails, typeName, id, noCache) {
+    controller.query = function(queryDetails, typeName, id, params) {
+        //noCache, searchInheritable) {
 
         var deferred = $q.defer();
 
+        //////////////////////////////////////
+
         var url;
+
+        //////////////////////////////////////
+        //////////////////////////////////////
+        //////////////////////////////////////
+
+        if(!params) {
+            params = {}
+        }
+
+        //////////////////////////////////////
+
+        //If using the old school noCache instead of params object
+        if (params && !_.isObject(params)) {
+            params = {
+                noCache:true,
+            }
+        }
+
+        //////////////////////////////////////
+
+        //Map each parameter as a query string variable
+        var queryParams = _.map(params, function(v, k) {
+            return encodeURIComponent(k) + '=' + encodeURIComponent(v);
+        }).join('&');
+
+        //////////////////////////////////////
 
         if (id) {
 
             url = Fluro.apiURL + '/content/_query/' + id;
-            if (noCache) {
-                url += '?noCache=true';
+            // if (noCache) {
+            //     url += '?noCache=true';
+            // }
+
+            //If there are query string parameters append them to the url
+            if (queryParams.length) {
+                url += '?' + queryParams;
             }
 
             $http.get(url).then(function(res) {
@@ -243,17 +277,30 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
         if (typeName && typeName.length) {
 
             url = Fluro.apiURL + '/content/' + typeName + '/_query';
-            if (noCache) {
-                url += '?noCache=true';
+            // if (noCache) {
+            //     url += '?noCache=true';
+            // }
+
+
+            //If there are query string parameters append them to the url
+            if (queryParams.length) {
+                url += '?' + queryParams;
             }
+
 
             $http.post(url, queryDetails).then(function(res) {
                 deferred.resolve(res.data);
             });
         } else {
             url = Fluro.apiURL + '/content/_query';
-            if (noCache) {
-                url += '?noCache=true';
+            // if (noCache) {
+            //     url += '?noCache=true';
+            // }
+
+
+            //If there are query string parameters append them to the url
+            if (queryParams.length) {
+                url += '?' + queryParams;
             }
 
             $http.post(url, queryDetails).then(function(res) {
