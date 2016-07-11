@@ -180,9 +180,9 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
     //////////////////////////////////////////////////
 
-    controller.getQuery = function(id, options) {
+    controller.getQuery = function(id, options, variables) {
 
-        if(!options) {
+        if (!options) {
             options = {};
         }
 
@@ -194,17 +194,36 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
         //Create the url
         var url = Fluro.apiURL + '/content/_query/' + id;
 
+        var queryParams = '';
+
         //If variables are provided
-        if (options.noCache || options.template) {
-            url += '?vars';
+        if (options.noCache || options.template || variables) {
+            queryParams = '?';
+        }
 
-            if (options.noCache) {
-                url += '&noCache=true';
-            }
+        ////////////////////////////
 
-            if (options.template) {
-                url += '&template=' + options.template;
-            }
+        if (options.noCache) {
+            queryParams += '&noCache=true';
+        }
+
+        if (options.template) {
+            queryParams += '&template=' + options.template;
+        }
+
+        ////////////////////////////
+
+        if (variables) {
+            //Map each parameter as a query string variable
+            queryParams += _.map(variables, function(v, k) {
+                return 'variables[' + k + ']=' + encodeURIComponent(v);
+            }).join('&');
+        }
+
+        ////////////////////////////
+
+        if(queryParams.length) {
+            url += queryParams;
         }
 
         ////////////////////////////
@@ -222,7 +241,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
     //////////////////////////////////////////////////
 
-    controller.query = function(queryDetails, typeName, id, params) {
+    controller.query = function(queryDetails, typeName, id, params, variables) {
         //noCache, searchInheritable) {
 
         var deferred = $q.defer();
@@ -235,7 +254,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
         //////////////////////////////////////
         //////////////////////////////////////
 
-        if(!params) {
+        if (!params) {
             params = {}
         }
 
@@ -244,7 +263,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
         //If using the old school noCache instead of params object
         if (params && !_.isObject(params)) {
             params = {
-                noCache:true,
+                noCache: true,
             }
         }
 
@@ -254,6 +273,17 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
         var queryParams = _.map(params, function(v, k) {
             return encodeURIComponent(k) + '=' + encodeURIComponent(v);
         }).join('&');
+
+
+        ////////////////////////////
+
+        if (variables) {
+            //Map each parameter as a query string variable
+            queryParams += _.map(variables, function(v, k) {
+                return 'variables[' + k + ']=' + encodeURIComponent(v);
+            }).join('&');
+        }
+
 
         //////////////////////////////////////
 
@@ -325,23 +355,23 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
         var variableParams;
 
-        if(variables) {
+        if (variables) {
             //Map each parameter as a query string variable
             variableParams = _.map(variables, function(v, k) {
-                return 'variables['+ k +']=' + encodeURIComponent(v);
+                return 'variables[' + k + ']=' + encodeURIComponent(v);
             }).join('&');
         }
 
         ////////////////////////////
 
-        if(noCache || variableParams) {
+        if (noCache || variableParams) {
             url += '?';
         }
 
         ////////////////////////////
 
-        if(variableParams && variableParams.length) {
-            url +=  variableParams;
+        if (variableParams && variableParams.length) {
+            url += variableParams;
         }
 
         ////////////////////////////
@@ -431,7 +461,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
         //Query all of the nodes by a GET request
         controller.retrieveMultiple(ids, noCache, {
             select: fields,
-            searchInheritable:searchInheritable,
+            searchInheritable: searchInheritable,
         }).then(deferred.resolve, deferred.reject);
 
         return deferred.promise;
@@ -458,7 +488,9 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
             //////////////////////////////////////////
 
             //Query all of the nodes by a GET request
-            controller.retrieveMultiple(requiredIds, noCache, {searchInheritable:searchInheritable}).then(function(res) {
+            controller.retrieveMultiple(requiredIds, noCache, {
+                searchInheritable: searchInheritable
+            }).then(function(res) {
                 //Add each item to the cache
                 _.each(res, function(item) {
                     console.log('Create and Cache', item.title)
