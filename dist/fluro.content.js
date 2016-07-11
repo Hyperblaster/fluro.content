@@ -314,7 +314,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
     //////////////////////////////////////////////////
 
-    controller.queryMultiple = function(ids, noCache) {
+    controller.queryMultiple = function(ids, noCache, variables) {
 
         var deferred = $q.defer();
 
@@ -328,7 +328,8 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
             method: 'GET',
             url: url,
             params: {
-                ids: ids
+                ids: ids,
+                variables:variables
             }
         }).then(function(res) {
             deferred.resolve(res.data);
