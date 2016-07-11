@@ -318,18 +318,46 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
         var deferred = $q.defer();
 
-
+        //Get the url
         var url = Fluro.apiURL + '/content/_query/multiple';
-        if (noCache) {
-            url += '?noCache=true';
+
+        ////////////////////////////
+
+        var variableParams;
+
+        if(variables) {
+            //Map each parameter as a query string variable
+            variableParams = _.map(variables, function(v, k) {
+                return 'variables['+ k +']=' + encodeURIComponent(v);
+            }).join('&');
         }
 
+        ////////////////////////////
+
+        if(noCache || variableParams) {
+            url += '?';
+        }
+
+        ////////////////////////////
+
+        if(variableParams && variableParams.length) {
+            url +=  variableParams;
+        }
+
+        ////////////////////////////
+
+        if (noCache) {
+            url += '&noCache=true';
+        }
+
+        ////////////////////////////
+
+        //Make the request
         $http({
             method: 'GET',
             url: url,
             params: {
                 ids: ids,
-                variables:variables
             }
         }).then(function(res) {
             deferred.resolve(res.data);
