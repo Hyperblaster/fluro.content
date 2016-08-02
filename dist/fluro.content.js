@@ -98,12 +98,16 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
     //////////////////////////////////////////////////
 
-    controller.getItemFromProduct = function(itemID, productID) {
+    controller.getItemFromProduct = function(itemID, productID, options) {
+
+        if(!options) {
+            options = {};
+        }
 
         var deferred = $q.defer();
 
         var url = Fluro.apiURL + '/content/contained/'+ productID +'/' + itemID;
-        if (noCache) {
+        if (options.noCache) {
             url += '?noCache=true';
         }
 
