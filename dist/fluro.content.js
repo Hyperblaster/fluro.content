@@ -95,6 +95,25 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
     var cache = {};
     var queryCache = {};
 
+
+    //////////////////////////////////////////////////
+
+    controller.getItemFromProduct = function(itemID, productID) {
+
+        var deferred = $q.defer();
+
+        var url = Fluro.apiURL + '/content/contained/'+ productID +'/' + itemID;
+        if (noCache) {
+            url += '?noCache=true';
+        }
+
+        $http.get(url).then(function(res) {
+            deferred.resolve(res.data);
+        });
+
+        return deferred.promise;
+    }
+
     //////////////////////////////////////////////////
 
     controller.getCollection = function(id, noCache) {
