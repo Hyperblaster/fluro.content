@@ -345,11 +345,9 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
                 deferred.resolve(res.data);
             });
         } else {
-            url = Fluro.apiURL + '/content/_query';
-            // if (noCache) {
-            //     url += '?noCache=true';
-            // }
 
+            //POST DYNAMIC QUERY
+            url = Fluro.apiURL + '/content/_query';
 
             //If there are query string parameters append them to the url
             if (queryParams.length) {
@@ -451,7 +449,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
     //////////////////////////////////////////////////
 
-    controller.populate = function(contentArray, noCache, searchInheritable) {
+    controller.populate = function(contentArray, noCache, params) {
         var ids = _.map(contentArray, function(item) {
             if (item._id) {
                 return item._id;
@@ -461,7 +459,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
         });
 
         // console.log('Populate no cache', noCache);
-        return controller.get(ids, noCache, searchInheritable);
+        return controller.get(ids, noCache, params);
     }
 
     //////////////////////////////////////////////////
@@ -493,7 +491,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
     //////////////////////////////////////////////////
 
-    controller.get = function(ids, noCache, searchInheritable) {
+    controller.get = function(ids, noCache, queryStringParams) {
 
         var deferred = $q.defer();
 
@@ -510,10 +508,20 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
             //////////////////////////////////////////
 
+            if(!queryStringParams) {
+                queryStringParams = {}
+            }
+
+            // if(_.isObject(paramsOrSearchInheritable)) {
+            //    queryParams = {
+            //         searchInheritable: searchInheritable
+            //     }
+            // }
+
+            //////////////////////////////////////////
+
             //Query all of the nodes by a GET request
-            controller.retrieveMultiple(requiredIds, noCache, {
-                searchInheritable: searchInheritable
-            }).then(function(res) {
+            controller.retrieveMultiple(requiredIds, noCache, queryStringParameters).then(function(res) {
                 //Add each item to the cache
                 _.each(res, function(item) {
                     // console.log('Create and Cache', item.title)
