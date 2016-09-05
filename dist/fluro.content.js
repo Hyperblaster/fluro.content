@@ -497,9 +497,13 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
         //////////////////////////////////
 
-        if(!noCache) {
+        var requiredIds;
+
+        if(noCache) {
+            requiredIds = ids;
+        } else {
             //Check if we already have the items
-            var requiredIds = _.filter(ids, function(id) {
+            requiredIds = _.filter(ids, function(id) {
                 return !(cache[id]);
             });
         }
