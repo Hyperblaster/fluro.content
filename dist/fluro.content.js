@@ -521,7 +521,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
             //////////////////////////////////////////
 
             //Query all of the nodes by a GET request
-            controller.retrieveMultiple(requiredIds, noCache, queryStringParameters).then(function(res) {
+            controller.retrieveMultiple(requiredIds, noCache, queryStringParams).then(function(res) {
                 //Add each item to the cache
                 _.each(res, function(item) {
                     // console.log('Create and Cache', item.title)
