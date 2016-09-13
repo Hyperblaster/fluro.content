@@ -100,19 +100,21 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
     controller.getItemFromProduct = function(itemID, productID, options) {
 
-        if(!options) {
+        if (!options) {
             options = {};
         }
 
         var deferred = $q.defer();
 
-        var url = Fluro.apiURL + '/content/contained/'+ productID +'/' + itemID;
+        var url = Fluro.apiURL + '/content/contained/' + productID + '/' + itemID;
         if (options.noCache) {
             url += '?noCache=true';
         }
 
         $http.get(url).then(function(res) {
             deferred.resolve(res.data);
+        }, function(err) {
+            deferred.reject(err);
         });
 
         return deferred.promise;
@@ -131,6 +133,8 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
         $http.get(url).then(function(res) {
             deferred.resolve(res.data);
+        }, function(err) {
+            deferred.reject(err);
         });
 
         return deferred.promise;
@@ -156,6 +160,8 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
             }
         }).then(function(res) {
             deferred.resolve(res.data);
+        }, function(err) {
+            deferred.reject(err);
         });
 
         /**        
@@ -245,7 +251,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
         ////////////////////////////
 
-        if(queryParams.length) {
+        if (queryParams.length) {
             url += queryParams;
         }
 
@@ -253,6 +259,8 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
         $http.get(url).then(function(res) {
             deferred.resolve(res.data);
+        }, function(err) {
+            deferred.reject(err);
         });
 
         ////////////////////////////
@@ -324,6 +332,8 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
             $http.get(url).then(function(res) {
                 deferred.resolve(res.data);
+            }, function(err) {
+                deferred.reject(err);
             });
         }
 
@@ -343,6 +353,8 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
             $http.post(url, queryDetails).then(function(res) {
                 deferred.resolve(res.data);
+            }, function(err) {
+                deferred.reject(err);
             });
         } else {
 
@@ -356,6 +368,8 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
             $http.post(url, queryDetails).then(function(res) {
                 deferred.resolve(res.data);
+            }, function(err) {
+                deferred.reject(err);
             });
         }
 
@@ -412,6 +426,8 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
             }
         }).then(function(res) {
             deferred.resolve(res.data);
+        }, function(err) {
+            deferred.reject(err);
         });
 
         return deferred.promise;
@@ -442,6 +458,8 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
             params: params
         }).then(function(res) {
             deferred.resolve(res.data);
+        }, function(err) {
+            deferred.reject(err);
         });
 
         return deferred.promise;
@@ -499,7 +517,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
         var requiredIds;
 
-        if(noCache) {
+        if (noCache) {
             requiredIds = ids;
         } else {
             //Check if we already have the items
@@ -514,7 +532,7 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
             //////////////////////////////////////////
 
-            if(!queryStringParams) {
+            if (!queryStringParams) {
                 queryStringParams = {}
             }
 
