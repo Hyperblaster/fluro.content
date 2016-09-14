@@ -362,11 +362,18 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
             url = Fluro.apiURL + '/content/_query';
 
             //If there are query string parameters append them to the url
-            if (queryParams.length) {
-                url += '?' + queryParams;
-            }
+            // if (queryParams.length) {
+            //     url += '?' + queryParams;
+            // }
 
-            $http.post(url, queryDetails).then(function(res) {
+            $http({
+                url: url, 
+                method: "POST",
+                params: params,
+                data:queryDetails
+             })
+            // $http.post(url, queryDetails)
+            .then(function(res) {
                 deferred.resolve(res.data);
             }, function(err) {
                 deferred.reject(err);
