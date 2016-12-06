@@ -6,7 +6,7 @@ angular.module('fluro.content', [
 
 	]);
 angular.module('fluro.content')
-.service('FluroContent', function($resource, CacheManager, Fluro) {
+.service('FluroContent', ['$resource', 'CacheManager', 'Fluro', function($resource, CacheManager, Fluro) {
 
     //////////////////////////////////////////////////
 
@@ -79,11 +79,11 @@ angular.module('fluro.content')
 
     return controller;
 
-});
+}]);
 
 
 
-angular.module('fluro.content').service('FluroContentRetrieval', function($cacheFactory, Fluro, $q, $http) {
+angular.module('fluro.content').service('FluroContentRetrieval', ['$cacheFactory', 'Fluro', '$q', '$http', function($cacheFactory, Fluro, $q, $http) {
 
 
     //////////////////////////////////////////////////
@@ -641,4 +641,4 @@ angular.module('fluro.content').service('FluroContentRetrieval', function($cache
 
     return controller;
 
-});
+}]);
