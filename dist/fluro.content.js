@@ -279,11 +279,11 @@ angular.module('fluro.content').service('FluroContentRetrieval', ['$cacheFactory
             url += '?';
 
             if(optionQueryString.length) {
-                url+= optionQueryString;
+                url+= '&' + optionQueryString;
             }
 
             if(variableQueryString.length) {
-                url+= variableQueryString;
+                url+= '&' + variableQueryString;
             }
         }
 
