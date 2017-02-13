@@ -250,6 +250,58 @@ angular.module('fluro.content').service('FluroContentRetrieval', ['$cacheFactory
         //Create the url
         var url = Fluro.apiURL + '/content/_query/' + id;
 
+
+        ////////////////////////////
+        ////////////////////////////
+
+        var variableQueryString = '';
+
+        if (variables) {
+            //Map each parameter as a query string variable
+            variableQueryString += _.map(variables, function(v, k) {
+                return 'variables[' + k + ']=' + encodeURIComponent(v);
+            }).join('&');
+        }
+
+        ////////////////////////////
+        ////////////////////////////
+
+
+         //Map each parameter as a query string variable
+        var optionQueryString = _.map(options, function(v, k) {
+            return encodeURIComponent(k) + '=' + encodeURIComponent(v);
+        }).join('&');
+
+        ////////////////////////////
+        ////////////////////////////
+
+        if (optionQueryString.length || variableQueryString) {
+            url += '?';
+
+            if(optionQueryString.length) {
+                url+= optionQueryString;
+            }
+
+            if(variableQueryString.length) {
+                url+= variableQueryString;
+            }
+        }
+
+        ////////////////////////////
+
+        $http.get(url).then(function(res) {
+            deferred.resolve(res.data);
+        }, function(err) {
+            deferred.reject(err);
+        });
+
+        ////////////////////////////
+
+        return deferred.promise;
+
+
+
+        /**
         var queryParams = '';
 
         //If variables are provided
@@ -293,6 +345,8 @@ angular.module('fluro.content').service('FluroContentRetrieval', ['$cacheFactory
         ////////////////////////////
 
         return deferred.promise;
+
+        /**/
 
     }
 
